@@ -1,0 +1,93 @@
+.ImgISUGAR-panelIcon {
+	background: url("resources/ironsugar.png") no-repeat 0 0;
+	width: 16px;
+	height: 16px;
+}
+
+.ISUGAR-icon-right {
+	background: url("resources/ironsugar.png") no-repeat 100% 50%;
+}
+
+.ImgISUGAR-lead {
+	background: url("resources/Leads.png") no-repeat 100% 50%;
+	width:16px;
+	height:16px;
+	overflow:hidden;
+}
+
+#zsugar_container {
+	height:315px;
+	padding:0;
+	margin:6px; 0 10px 0;
+}
+
+#zsugar_container ul, #zsugar_atts ul {
+	padding:0;
+	margin:0;
+}
+
+#zsugar_atts label{
+	display: inline-block;
+}
+
+#zsugar_container ul li {
+	list-style:none;
+	padding-left:5px;
+}
+
+
+#zsugar_contactIden {
+	padding:3px;
+}
+
+.center {
+	text-align:center;
+}
+
+.big {
+	font-size:25px;
+	font-weight:bold;
+}
+
+.med {
+	font-size:18px;
+}
+
+.marTop {
+	margin-top:30px;
+}
+
+#zsugar_atts {
+	height:50px;
+	padding:0;
+	margin:6px; 0 10px 0;
+}
+
+#zsugar_atts li {
+	list-style:none;
+	margin-right:4px;
+	display:inline;
+}
+
+#zsugar_logo {
+	background: url("resources/logoej.gif") no-repeat 10px center;
+	padding-left:60px;
+	padding-right:15px;
+	height:40px;
+}
+
+#zsuguar_ilogo {
+	background: url("resources/irontec.png") no-repeat 10px  center;
+	padding-left:60px;
+	padding-right:15px;
+	height:40px;
+}
+
+#zsugar_powered {
+	float : right;
+}
+
+.MoreButtons {
+	margin-left: 35px;
+	margin-top: 15px;
+}

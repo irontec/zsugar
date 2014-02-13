@@ -1,0 +1,31 @@
+zSugar 1.4.7
+SugarCRM integration into Zimbra
+
+================================
+====== Table of Contents  ======
+================================
+1.- Zimlet Installation instructions
+2.- Zimlet Configuration & Use
+
+
+-----------------------------------------------------------------
+1.- Zimlet installation:
+
+- To install the zimlet, start by putting it on the server, and connect to the server with the zimbra user.
+ $$ su - zimbra
+
+- Install the zimlet with the following command :
+ $ zmzimletctl deploy com_irontec_zsugar.zip
+
+- Then, restart jetty (interruption of access to the webmail) with this command: 
+ $ zmmailboxdctl restart
+
+- At last, activate/desactivate the zimlet for the COS (by default the zimlet is active on the "default" COS and inactive on the other COS).
+
+-----------------------------------------------------------------
+2.- Zimlet Configuration & Use
+- Please, refer to README file for instructions of how to configure and use this zimlet
+
+
+-----------------------------------------------------------------
+

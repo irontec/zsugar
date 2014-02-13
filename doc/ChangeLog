@@ -1,0 +1,126 @@
+2013-09-10 zsugar 1.4.7
+	* Added an input box to filter results
+
+2013-08-22 zsugar 1.4.6
+	* Added a checkbox to assign created Lead to our logged user
+	* Fixed empty description for created Leads
+	* Escaped special json characters from created Leads input fields 
+
+2013-07-11 zsugar 1.4.5
+	* Added a new option to create Lead objects in SugarCRM
+
+2013-04-22 zsugar 1.4.4
+	* Force reload message data. If message is readed in a panel, ZmMailMsg object lacks some data.
+
+2013-01-11 zsugar 1.4.3
+	* Added missing base64decode jar file (thanks Jakub Sanecki for the report)
+
+2013-01-10 zsugar 1.4.2
+	* Added compatibility with Zimbra 8
+	* Fixed a bug in UTC import date
+
+2012-09-03 zsugar 1.4.1
+	* Added Leads as root nodes of relationships (like Contacts)
+
+2012-09-03 zsugar 1.4.0 
+	* Added compatibility with SugarCRM 6.4.x
+	* Replaced subqueries with get_relation requests
+	* Created a Note item before attaching a file to an Email (mandatory in 6.4.x)
+
+2012-05-21 zsugar 1.3.1
+	* Sorted results by date_modified in all sections (whenever possible)
+
+2012-01-03 zsugar 1.3.0
+	* Added compatibility with Cases module
+
+2011-12-26 zsugar 1.2.10
+	* Fixed a bug while adding zsugar button when no context menu is available
+
+2011-12-12 zsugar 1.2.9
+	* Added Russian Localization (thanks to Anonymous)
+	* Added compatibility with Zimbra 7.x (thanks to Thom Schotman, Luis Fernando Maldonado Arango)
+
+2011-12-02 zsugar 1.2.8
+	* Added compatibility with SugarCRM 6.1.x
+
+2011-08-24 zsugar 1.2-beta7
+	* Added a new feature to search for alternative mail address
+
+2011-08-08 zsugar 1.2-beta6
+	* Fixed all methods with quoted parameters (Bug #603)
+	* Correctly escaped JSON strings (using new method EscapeJSON)
+	* Fixed a bug that fetched 'account' column in Contacts table (which doesn't exist)
+	* Added an error message if Email import fails.
+	* Fixed the format of Sent and Created Emails date. (YY/MM/DD -> YY-MM-DD)
+
+2011-06-01 zsugar 1.2-beta5
+	* Exported email sent date as sCRM creation date (requested by Thom Schotman)
+
+2011-05-24 zsugar 1.2-beta4
+	* Escaped some characters that sCRM doesn't parse correctly
+	* Set default email status as 'archived'
+
+2011-05-23 zsugar 1.2-beta3
+	* Fixed a bug for sCRM 5.5 leads compatibility
+
+2011-04-14 zsugar 1.2-beta2
+	* Added a feature to tag exported emails
+	* Added a check that warns while trying to export an exported tagged email
+
+2011-04-11 zsugar 1.2-beta1
+	* Fixed a bug with large subject (>85 chars)
+	* Fixed a bug with contacts with the same email address
+	* Added SugarCRM Leads Modules
+	* Allow multiple contacts
+	* Added a button to change mail subject before export
+	* Source cleaned
+	* File Structure updated
+
+2011-03-02 zsugar 1.1-beta7
+	* Fixed a bug in some escape characters in Plain Text email body
+
+2011-02-28 zSugar 1.1-beta6.1
+	* Fixed a bug when related Opportunities, Accounts and Project info was returned in bidimensional arrays
+	* Fixed a bug for what Contact Line was not correctly cleared while searching info of a new contact
+	* Added a link in Powered by Logo
+
+2011-02-21 zSugar 1.1-beta6
+	* Fixed a bug in style overflow in Internet Explorer browser
+	* In sent messages, contact box will show TO instead of FROM by default
+
+2011-02-08 zSugar 1.1-beta5
+	* Added LDAP Authentication (Using clean passwords, rely on SSL protocol)
+	* Given some credits to Base64 Library developers
+
+2011-01-14 zSugar 1.1-beta4
+	* Added SugarCRM Contacts Module
+	* Attachment checkboxes will be checked by default
+	* Recipients listbox will be disabled while a query is being proccessing
+	* Attachments frame has been increased
+	* Attachments checboxes will be always next to their labels
+	* Fixed a Bug with Contact line not being cleared after a search 
+	* Fixed a Bug with attachments with the same name
+	* Fixed a Bug with Translated texts in Aboutbox
+	* Fixed a Bug with Attachment Processing message 
+	* Cofiguration Sugar URL doesn't require full path to REST Service now
+	* Changed zSugar icon
+	* Created Documentation Files (INSTALL, README, ..)
+	
+
+2011-01-05 zSugar 1.1-beta3
+	* Added a Toolbar button
+	* Added a Context Menu button
+	* Added a Powered by Irontec logo
+	* Fixed a bug in non UTF filenames
+	* Fixed a bug in HTML messages
+	* Improved some errors feedback
+
+2011-01-03 zSugar 1.1-beta2
+	* Added Attachments support
+	* Fixed a problem with some characters in mails body.
+	* Improved message feedback.
+	* I18N to Spanish/English/Basque
+
+2010-02-01 zSugar 1.0-beta1
+
+	* First Release

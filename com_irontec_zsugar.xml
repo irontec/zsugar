@@ -1,0 +1,50 @@
+<zimlet name="com_irontec_zsugar" version="1.4.7" description="SugarCRM integration">
+	<include>md5.js</include>
+	<include>sugarrestapi.js</include>
+	<include>zsugar.js</include>
+	<includeCSS>zsugar.css</includeCSS>
+
+        <resource>redirect.jsp</resource>
+        <resource>base64coder.jar</resource>
+
+	<handlerObject>com_irontec_zsugarH</handlerObject>
+	
+	<resource>resources/ironsugar.png</resource>
+	<resource>resources/Contacts.png</resource>
+	<resource>resources/Accounts.png</resource>
+	<resource>resources/Opportunities.png</resource>
+	<resource>resources/Project.png</resource>
+	<resource>resources/Leads.png</resource>
+	<resource>resources/loadingbar.gif</resource>
+	<resource>resources/logoej.gif</resource>
+	<resource>resources/irontec.png</resource>
+	<resource>resources/Poweredby.png</resource>
+
+	<zimletPanelItem label="zSugar" icon="ISUGAR-panelIcon">
+		<toolTipText>${msg.zsugar_tooltip}</toolTipText>
+		<dragSource type="ZmConv" />
+	  	<dragSource type="ZmMailMsg" />
+	<!-- Someday...		<dragSource type="ZmAppt" /> -->
+      		<contextMenu>
+			<menuItem label="${msg.zsugar_relogin}" id="ISUGAR_RELOGIN" />
+			<menuItem label="${msg.zsugar_status}" id="ISUGAR_STATUS" />
+		        <menuItem label="${msg.zsugar_about}" id="ISUGAR_ABOUT" />
+        	</contextMenu>
+       </zimletPanelItem>
+       
+       <userProperties>
+        <property type="string" label="${msg.zsugar_username}" name="my_zsugar_username" required="true" />
+        <property type="password" label="${msg.zsugar_pass}" name="my_zsugar_pass" required="true" />
+        <property type="string" label="${msg.zsugar_url}" name="my_zsugar_url" required="true" value="https://www.example.com/CRM/" />
+	<property type="boolean" label="${msg.zsugar_cleanpass}" name="my_zsugar_cleanpass" value="false" />
+        <property type="boolean" label="${msg.zsugar_accounts}" name="my_zsugar_accounts" value="true" />
+        <property type="boolean" label="${msg.zsugar_projects}" name="my_zsugar_project" value="true"/>
+        <property type="boolean" label="${msg.zsugar_opportunities}" name="my_zsugar_opportunities" value="true" />
+	<property type="boolean" label="${msg.zsugar_leads}" name="my_zsugar_leads" value="true" />
+	<property type="boolean" label="${msg.zsugar_cases}" name="my_zsugar_cases" value="true" />
+
+	<property type="string"  label="${msg.zsugar_tag}" name="my_zsugar_tag" value="" />
+       </userProperties>
+    
+</zimlet>
+
