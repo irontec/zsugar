@@ -132,6 +132,9 @@ com_irontec_zsugarH.prototype.initializeToolbar =
 com_irontec_zsugarH.prototype.init = function() {
 	var controller = appCtxt.getCurrentController();
 
+        // Get Zimbra Major vesion
+        this._zimbraMajorVer = appCtxt.getSettings().getInfoResponse.version.charAt(0);
+
 	/* If a context menu is available */
 	if (controller.getActionMenu){
 		var menu = controller.getActionMenu();
@@ -245,7 +248,11 @@ com_irontec_zsugarH.prototype.tag = function (msg, tagName) {
 	var action = request.action = {};
 	action.id = msg.id;
 	action.op = axnType;
-	action.tag = tagId;
+        if (this._zimbraMajorVer >= "8") {
+                action.tn = tagName;
+        } else {
+                action.tag = tagId;
+        }
 
 	var params = {asyncMode: true, callback: null, jsonObj:itemActionRequest};
 	appCtxt.getAppController().sendRequest(params);
