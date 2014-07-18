@@ -1,3 +1,9 @@
+2014-06-20 zsugar 1.4.9
+	* Fixed tag request for Zimbra8+
+
+2014-06-20 zsugar 1.4.8
+	* Fixed exported tag function for Zimbra 8+
+
 2013-09-10 zsugar 1.4.7
 	* Added an input box to filter results
 

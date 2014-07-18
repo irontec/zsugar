@@ -70,7 +70,10 @@ ironsugar.prototype._doPOST = function (url, params, callback) {
 //		AjxRpc.invoke(params, entireurl, hdrs, callback, false);
 
 		var jspUrl = this.parent.getResource("redirect.jsp");
+	try {
 	    AjxRpc.invoke(params, jspUrl, hdrs, callback, false);
+	} catch (err) {
+	}
 }
 
 /***
