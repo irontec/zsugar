@@ -95,8 +95,8 @@ com_irontec_zsugarH.prototype.menuItemSelected = function(itemId) {
 com_irontec_zsugarH.prototype.initializeToolbar =
 	function(app, toolbar, controller, viewId) {
 
-    if (viewId == ZmId.VIEW_CONVLIST || viewId == ZmId.VIEW_TRAD || 			// Zimbra /
-       viewId == ZmId.VIEW_CONVLIST+"-main" || viewId == ZmId.VIEW_TRAD+"-main" ){	// Zimbra 8+
+    if (viewId.slice(0, ZmId.VIEW_CONVLIST.length) == ZmId.VIEW_CONVLIST || 
+	viewId.slice(0, ZmId.VIEW_TRAD.length) == ZmId.VIEW_TRAD ) {
         // Get the index of "View" menu so we can display the button after that
         var buttonIndex = 0;
         for (var i = 0; i < toolbar.opList.length; i++) 
@@ -116,6 +116,31 @@ com_irontec_zsugarH.prototype.initializeToolbar =
         // Creates the button with an id and params containing the button details
         var button = toolbar.createOp("SEND_SUGAR_TOOLBAR", buttonParams);
         button.addSelectionListener(new AjxListener(this, this._addSugarMsg,controller));   
+
+        /* If a context menu is available */
+        if (controller.getActionMenu){
+                var menu = controller.getActionMenu();
+
+                // Find the Last Menu Position
+                var buttonIndex = 0;
+                for (var i = 0; i < menu.opList.length; i++)
+                    if (menu.opList[i] == ZmOperation.CREATE_TASK) {
+                            buttonIndex = i + 1;
+                            break;
+                    }
+
+                    // Add a new button
+                    var menuParams = {
+                        text: this.getMessage("zsugar_bn_addSugar"),
+                        tooltip: this.getMessage("zsugar_bn_addSugar_tooltip"),
+                        index: buttonIndex,
+                        image: "ISUGAR-panelIcon"
+                };
+
+                // When this button is clicked execute callback
+                var mi = menu.createMenuItem("SEND_SUGAR_MENU", menuParams);
+                mi.addSelectionListener(new AjxListener(this, this._addSugarMsg,controller));
+        }
     }
 };
 
@@ -135,30 +160,6 @@ com_irontec_zsugarH.prototype.init = function() {
         // Get Zimbra Major vesion
         this._zimbraMajorVer = appCtxt.getSettings().getInfoResponse.version.charAt(0);
 
-	/* If a context menu is available */
-	if (controller.getActionMenu){
-		var menu = controller.getActionMenu();
-		
-		// Find the Last Menu Position
-		var buttonIndex = 0;
-		for (var i = 0; i < menu.opList.length; i++) 
-		    if (menu.opList[i] == ZmOperation.CREATE_TASK) {
-		            buttonIndex = i + 1;
-		            break;
-		    }
-
-		    // Add a new button
-		    var menuParams = {
-		        text: this.getMessage("zsugar_bn_addSugar"),
-		        tooltip: this.getMessage("zsugar_bn_addSugar_tooltip"),
-		        index: buttonIndex,
-		        image: "ISUGAR-panelIcon"
-		};
-		
-		// When this button is clicked execute callback
-		var mi = menu.createMenuItem("SEND_SUGAR_MENU", menuParams);
-		mi.addSelectionListener(new AjxListener(this, this._addSugarMsg,controller));
-	}
 	// Try to Login!
 	this._login();
 };
