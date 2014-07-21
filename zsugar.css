@@ -15,6 +15,27 @@
 	overflow:hidden;
 }
 
+.ImgISUGAR-opportunity {
+	background: url("resources/Opportunities.png") no-repeat 100% 50%;
+	width:16px;
+	height:16px;
+	overflow:hidden;
+}
+
+.ImgISUGAR-case {
+	background: url("resources/Cases.png") no-repeat 100% 50%;
+	width:16px;
+	height:16px;
+	overflow:hidden;
+}
+
+.ImgISUGAR-contact {
+	background: url("resources/Contacts.png") no-repeat 100% 50%;
+	width:16px;
+	height:16px;
+	overflow:hidden;
+}
+
 #zsugar_container {
 	height:315px;
 	padding:0;

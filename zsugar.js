@@ -626,10 +626,26 @@ com_irontec_zsugarH.prototype._moreOptsMenu = function() {
 	var button = this.pbDialog.getButton(this.moreOptsButtonId);
 	var menu = new DwtSelectMenu(button);
 	var createOpts = new DwtSelectMenuItem(menu);
+	var createOptsOpportunities = new DwtSelectMenuItem(menu);
+	var createOptsCase = new DwtSelectMenuItem(menu);
+	var createOptsContact = new DwtSelectMenuItem(menu);
 
 	createOpts.setText(this.getMessage("zsugar_createLead"));
 	createOpts.setImage("ISUGAR-lead");
+
+	createOptsOpportunities.setText(this.getMessage("zsugar_createOpportunity"));
+	createOptsOpportunities.setImage("ISUGAR-opportunity");
+
+	createOptsCase.setText(this.getMessage("zsugar_createCase"));
+	createOptsCase.setImage("ISUGAR-case");
+
+	createOptsContact.setText(this.getMessage("zsugar_createContact"));
+	createOptsContact.setImage("ISUGAR-contact");
+
 	createOpts.addSelectionListener(new AjxListener(this, this._newLeadDialog));
+	createOptsOpportunities.addSelectionListener(new AjxListener(this, this._newOpportunityDialog));
+	createOptsCase.addSelectionListener(new AjxListener(this, this._newCaseDialog));
+	createOptsContact.addSelectionListener(new AjxListener(this, this._newContactDialog));
 
 	return menu;
 }
@@ -1320,6 +1336,27 @@ com_irontec_zsugarH.prototype._moreOptionsDialog = function() {
 		newLeadButton.getHtmlElement().getElementsByTagName("table")[0].style.height = "30px";
         	newLeadButton.addSelectionListener(new AjxListener(this, this._newLeadDialog));
 
+		var newOpportunityButton = new DwtButton(buttonParams);
+		newOpportunityButton.setText(this.getMessage("zsugar_createOpportunity"));
+		newOpportunityButton.setImage("ISUGAR-opportunity");
+		newOpportunityButton.getHtmlElement().getElementsByTagName("table")[0].style.width = "180px";
+		newOpportunityButton.getHtmlElement().getElementsByTagName("table")[0].style.height = "30px";
+		newOpportunityButton.addSelectionListener(new AjxListener(this, this._newOpportunityDialog));
+
+		var newCasesButton = new DwtButton(buttonParams);
+		newCasesButton.setText(this.getMessage("zsugar_createCase"));
+		newCasesButton.setImage("ISUGAR-case");
+		newCasesButton.getHtmlElement().getElementsByTagName("table")[0].style.width = "180px";
+		newCasesButton.getHtmlElement().getElementsByTagName("table")[0].style.height = "30px";
+		newCasesButton.addSelectionListener(new AjxListener(this, this._newCaseDialog));
+
+		var newContactButton = new DwtButton(buttonParams);
+		newContactButton.setText(this.getMessage("zsugar_createContact"));
+		newContactButton.setImage("ISUGAR-contact");
+		newContactButton.getHtmlElement().getElementsByTagName("table")[0].style.width = "180px";
+		newContactButton.getHtmlElement().getElementsByTagName("table")[0].style.height = "30px";
+		newContactButton.addSelectionListener(new AjxListener(this, this._newContactDialog));
+
                 // pass the title, view & buttons information to create dialog box
                 this.pbMoreOptionsDialog = new ZmDialog({title:sDialogTitle, view:this.pMoreOptionsView, parent: this.getShell(),
                                                      standardButtons:[DwtDialog.CANCEL_BUTTON]});
@@ -1395,6 +1432,194 @@ com_irontec_zsugarH.prototype._newLeadDialog = function() {
 	}
         this.pNewLeadDialog.popup(); //show the dialog
 };
+com_irontec_zsugarH.prototype._newOpportunityDialog = function() {
+	//this.pbMoreOptionsDialog.popdown(); //Hide menu dialog
+
+	if (!this.pNewOpportunityView) {
+		var sDialogTitle = this.getMessage("zsugar_createOpportunity"); // Get i18n resource string
+		this.pNewOpportunityView = new DwtComposite(this.getShell());    // Creates an empty div as a child of main shell div
+		this.pNewOpportunityView.setSize("450", "250");                      // Set width and height
+
+		var html = [], i=0;
+		html[i++] = "<table>";
+		html[i++] =     "<tr><td>"+this.getMessage("zsugar_Opportunity_name")+":</td><td id='zsugar_Opportunity_name'></td></tr>";
+		html[i++] =     "<tr><td>"+this.getMessage("zsugar_Opportunity_account")+":</td><td id='zsugar_Opportunity_account'></td></tr>";
+		html[i++] =     "<tr><td>"+this.getMessage("zsugar_Opportunity_date")+":</td><td id='zsugar_Opportunity_date'></td></tr>";
+		html[i++] =     "<tr><td>"+this.getMessage("zsugar_Opportunity_amount")+":</td><td id='zsugar_Opportunity_amount'></td></tr>";
+		html[i++] =     "<tr><td>"+this.getMessage("zsugar_Opportunity_stage")+":</td><td id='zsugar_Opportunity_stage'></td></tr>";
+		html[i++] =     "<tr><td colspan='2'><input type='checkbox' id='zsugar_Opportunity_assigned' checked>"+this.getMessage("zsugar_Opportunity_assigned")+"</input></td></tr>";
+		html[i++] = "<table>";
+
+		this.pNewOpportunityView.getHtmlElement().innerHTML = html.join("");
+
+		// pass the title, view & buttons information to create dialog box
+		this.pNewOpportunityDialog = new ZmDialog({title:sDialogTitle, view: this.pNewOpportunityView, parent: this.getShell(),
+		                                     standardButtons:[DwtDialog.CANCEL_BUTTON, DwtDialog.OK_BUTTON]});
+		this.pNewOpportunityDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._createNewOpportunity));
+
+		this.inOpportunityName = new DwtInputField({parent: this.pNewOpportunityView, size: 30});
+		document.getElementById("zsugar_Opportunity_name").appendChild(this.inOpportunityName.getHtmlElement());
+		this.inOpportunityAccount = new DwtInputField({parent: this.pNewOpportunityView, size: 30});
+		document.getElementById("zsugar_Opportunity_account").appendChild(this.inOpportunityAccount.getHtmlElement());
+		this.inOpportunityAmount = new DwtInputField({parent: this.pNewOpportunityView, size: 30});
+		document.getElementById("zsugar_Opportunity_amount").appendChild(this.inOpportunityAmount.getHtmlElement());
+		this.inOpportunityDate = new DwtInputField({parent: this.pNewOpportunityView, size: 30});
+		document.getElementById("zsugar_Opportunity_date").appendChild(this.inOpportunityDate.getHtmlElement());
+		this.inOpportunityStage = new DwtHtmlEditor({parent: this.pNewOpportunityView});
+		this.inOpportunityStage.setSize(300, 70);
+		document.getElementById("zsugar_Opportunity_stage").appendChild(this.inOpportunityStage.getHtmlElement());
+	}
+
+	// Initialize fields
+	this.inOpportunityStage.setContent("");
+	this.inOpportunityName.setValue("");
+	this.inOpportunityAccount.setValue("");
+	this.inOpportunityAmount.setValue("");
+
+	var today = new Date();
+	var dd = today.getDate();
+	var mm = today.getMonth()+1; //January is 0!
+	var yyyy = today.getFullYear();
+
+	this.inOpportunityDate.setValue(dd+ "/" +mm+ "/" +yyyy);
+
+	if(this.emailAddr) {
+		this.inOpportunityAccount.setValue(this.emailAddr);
+		for (i=0;i<this.addressList.length; i++){
+			if (this.addressList[i].email == this.emailAddr) {
+				var name = "";
+				if (this.addressList[i].dispName.length) {
+					name = this.addressList[i].dispName;
+				}
+				if (this.addressList[i].name.length) {
+					name = this.addressList[i].name;
+				}
+				if (name.length) {
+					var name = name.split(" ");
+					this.inOpportunityName.setValue(name.shift());
+			}
+				break;
+			}
+		}
+	}
+
+        this.pNewOpportunityDialog.popup(); //show the dialog
+};
+com_irontec_zsugarH.prototype._newCaseDialog = function() {
+	//this.pbMoreOptionsDialog.popdown(); //Hide menu dialog
+
+	if (!this.pNewCaseView) {
+		var sDialogTitle = this.getMessage("zsugar_createCase"); 		// Get i18n resource string
+		this.pNewCaseView = new DwtComposite(this.getShell());    		// Creates an empty div as a child of main shell div
+		this.pNewCaseView.setSize("450", "250");                      	// Set width and height
+
+		var html = [], i=0;
+		html[i++] = "<table>";
+		html[i++] =     "<tr><td>"+this.getMessage("zsugar_Case_name")+":</td><td id='zsugar_Case_name'></td></tr>";
+		html[i++] =     "<tr><td>"+this.getMessage("zsugar_Case_account")+":</td><td id='zsugar_Case_account'></td></tr>";
+		html[i++] =     "<tr><td>"+this.getMessage("zsugar_Case_subject")+":</td><td id='zsugar_Case_subject'></td></tr>";
+		html[i++] =     "<tr><td>"+this.getMessage("zsugar_Case_description")+":</td><td id='zsugar_Case_description'></td></tr>";
+		html[i++] =     "<tr><td>"+this.getMessage("zsugar_Case_resolution")+":</td><td id='zsugar_Case_resolution'></td></tr>";
+		html[i++] =     "<tr><td colspan='2'><input type='checkbox' id='zsugar_Case_assigned' checked>"+this.getMessage("zsugar_Case_assigned")+"</input></td></tr>";
+		html[i++] = "<table>";
+
+		this.pNewCaseView.getHtmlElement().innerHTML = html.join("");
+
+		// pass the title, view & buttons information to create dialog box
+		this.pNewCaseDialog = new ZmDialog({title:sDialogTitle, view: this.pNewCaseView, parent: this.getShell(),
+		                                     standardButtons:[DwtDialog.CANCEL_BUTTON, DwtDialog.OK_BUTTON]});
+		this.pNewCaseDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._createNewCase));
+
+		this.inCaseName = new DwtInputField({parent: this.pNewCaseView, size: 30});
+		document.getElementById("zsugar_Case_name").appendChild(this.inCaseName.getHtmlElement());
+		this.inCaseAccount = new DwtInputField({parent: this.pNewCaseView, size: 30});
+		document.getElementById("zsugar_Case_account").appendChild(this.inCaseAccount.getHtmlElement());
+		this.inCaseSubject = new DwtInputField({parent: this.pNewCaseView, size: 30});
+		document.getElementById("zsugar_Case_subject").appendChild(this.inCaseSubject.getHtmlElement());
+		this.inCaseDescription = new DwtInputField({parent: this.pNewCaseView, size: 30});
+		document.getElementById("zsugar_Case_description").appendChild(this.inCaseDescription.getHtmlElement());
+		this.inCasResolution = new DwtHtmlEditor({parent: this.pNewCaseView});
+		this.inCasResolution.setSize(300, 70);
+		document.getElementById("zsugar_Case_resolution").appendChild(this.inCasResolution.getHtmlElement());
+	}
+
+	// Initialize fields
+	this.inCasResolution.setContent("");
+	this.inCaseName.setValue("");
+	this.inCaseAccount.setValue("");
+	this.inCaseSubject.setValue("");
+	this.inCaseDescription.setValue("");
+        this.pNewCaseDialog.popup(); //show the dialog
+};
+
+com_irontec_zsugarH.prototype._newContactDialog = function() {
+	//this.pbMoreOptionsDialog.popdown(); //Hide menu dialog
+
+	if (!this.pNewContactView) {
+		var sDialogTitle = this.getMessage("zsugar_createContact"); // Get i18n resource string
+		this.pNewContactView = new DwtComposite(this.getShell());    // Creates an empty div as a child of main shell div
+		this.pNewContactView.setSize("450", "250");                      // Set width and height
+
+		var html = [], i=0;
+		html[i++] = "<table>";
+		html[i++] =     "<tr><td>"+this.getMessage("zsugar_contact_firstname")+":</td><td id='zsugar_contact_firstname'></td></tr>";
+		html[i++] =     "<tr><td>"+this.getMessage("zsugar_contact_lastname")+":</td><td id='zsugar_contact_lastname'></td></tr>";
+		html[i++] =     "<tr><td>"+this.getMessage("zsugar_contact_email")+":</td><td id='zsugar_contact_email'></td></tr>";
+		html[i++] =     "<tr><td>"+this.getMessage("zsugar_contact_account")+":</td><td id='zsugar_contact_account'></td></tr>";
+		html[i++] =     "<tr><td>"+this.getMessage("zsugar_contact_desc")+":</td><td id='zsugar_contact_desc'></td></tr>";
+		html[i++] =     "<tr><td colspan='2'><input type='checkbox' id='zsugar_contact_assigned' checked>"+this.getMessage("zsugar_contact_assigned")+"</input></td></tr>";
+		html[i++] = "<table>";
+
+		this.pNewContactView.getHtmlElement().innerHTML = html.join("");
+
+		// pass the title, view & buttons information to create dialog box
+		this.pNewContactDialog = new ZmDialog({title:sDialogTitle, view: this.pNewContactView, parent: this.getShell(),
+		                                     standardButtons:[DwtDialog.CANCEL_BUTTON, DwtDialog.OK_BUTTON]});
+		this.pNewContactDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._createNewContact));
+
+		this.inContactFirstNameBox = new DwtInputField({parent: this.pNewContactView, size: 30});
+		document.getElementById("zsugar_contact_firstname").appendChild(this.inContactFirstNameBox.getHtmlElement());
+		this.inContactLastNameBox = new DwtInputField({parent: this.pNewContactView, size: 30});
+		document.getElementById("zsugar_contact_lastname").appendChild(this.inContactLastNameBox.getHtmlElement());
+		this.inContactEmailBox = new DwtInputField({parent: this.pNewContactView, size: 30});
+		document.getElementById("zsugar_contact_email").appendChild(this.inContactEmailBox.getHtmlElement());
+		this.inContactAccBox = new DwtInputField({parent: this.pNewContactView, size: 30});
+		document.getElementById("zsugar_contact_account").appendChild(this.inContactAccBox.getHtmlElement());
+		this.taContactDescription = new DwtHtmlEditor({parent: this.pNewContactView});
+		this.taContactDescription.setSize(300, 70);
+		document.getElementById("zsugar_contact_desc").appendChild(this.taContactDescription.getHtmlElement());
+	}
+
+	// Initialize fields
+	this.taContactDescription.setContent("");
+	this.inContactLastNameBox.setValue("");
+	this.inContactFirstNameBox.setValue("");
+	this.inContactEmailBox.setValue("");
+	this.inContactAccBox.setValue("");
+
+	// Set values if any
+	if(this.emailAddr) {
+		this.inContactEmailBox.setValue(this.emailAddr);
+		for (i=0;i<this.addressList.length; i++){
+			if (this.addressList[i].email == this.emailAddr) {
+				var name = "";
+				if (this.addressList[i].dispName.length) {
+					name = this.addressList[i].dispName;
+				}
+				if (this.addressList[i].name.length) {
+					name = this.addressList[i].name;
+				}
+				if (name.length) {
+					var name = name.split(" ");
+					this.inContactFirstNameBox.setValue(name.shift());
+					this.inContactLastNameBox.setValue(name.join(" "));
+				}
+				break;
+			}
+		}
+	}
+        this.pNewContactDialog.popup(); //show the dialog
+};
 
 com_irontec_zsugarH.prototype._createNewLead = function () {
 	// TODO verify required data
@@ -1413,6 +1638,55 @@ com_irontec_zsugarH.prototype._createNewLead = function () {
 	this.iscrm.createLead(firstname, lastname, email, acc, desc, assigned, this._leadCreated);
 
 }
+com_irontec_zsugarH.prototype._createNewOpportunity = function () {
+	// TODO verify required data
+
+	var name = this.inOpportunityName.getValue();
+	var account = this.inOpportunityAccount.getValue();
+	var amount = this.inOpportunityAmount.getValue();
+	var date = this.inOpportunityDate.getValue();
+	var assigned = document.getElementById("zsugar_Opportunity_assigned").checked;
+	var stage = this.inOpportunityStage.getContent();
+
+	// Hide the dialog
+	this.pNewOpportunityDialog.popdown();
+	this.iscrm.createOpportunity(name, account, amount, date, stage, assigned, this._OpportunityCreated);
+
+}
+com_irontec_zsugarH.prototype._createNewCase = function () {
+	// TODO verify required data
+
+	var name = this.inCaseName.getValue();
+	var account = this.inCaseAccount.getValue();
+	var subject = this.inCaseSubject.getValue();
+	var desc = this.inCaseDescription.getValue();
+	var assigned = document.getElementById("zsugar_Case_assigned").checked;
+	var resolution = this.inCasResolution.getContent();
+
+	// Hide the dialog
+	this.pNewCaseDialog.popdown();
+
+	this.iscrm.createCase(name, account, subject, desc, resolution, assigned, this._CaseCreated);
+
+}
+
+com_irontec_zsugarH.prototype._createNewContact = function () {
+	// TODO verify required data
+
+	var firstname = this.inContactFirstNameBox.getValue();
+	var lastname = this.inContactLastNameBox.getValue();
+	var email = this.inContactEmailBox.getValue();
+	var acc = this.inContactAccBox.getValue();
+	var assigned = document.getElementById("zsugar_contact_assigned").checked;
+	var desc = this.taContactDescription.getContent();
+
+	// Hide the dialog
+	this.pNewContactDialog.popdown();
+
+	// Request CRM to create the Lead
+	this.iscrm.createContact(firstname, lastname, email, acc, desc, assigned, this._contactCreated);
+
+}
 
 com_irontec_zsugarH.prototype._leadCreated = function(response){
 	if (response.id) {
@@ -1422,6 +1696,36 @@ com_irontec_zsugarH.prototype._leadCreated = function(response){
 		return this._updateCRMValue();
 	} else {
 		return appCtxt.getAppController().setStatusMsg(this.getMessage("zsugar_leadError"));
+	}
+}
+com_irontec_zsugarH.prototype._OpportunityCreated = function(response){
+	if (response.id) {
+		var url =  this.getUserPropertyInfo("my_zsugar_url").value+"/index.php?module=Opportunities&action=DetailView&record="+response.id;
+		var msg = this.getMessage("zsugar_OpportunityCreated")+"<br><a target='_blank' href='"+url+"'>"+this.inOpportunityName.getValue()+"</a>";
+		appCtxt.getAppController().setStatusMsg(msg);
+		return this._updateCRMValue();
+	} else {
+		return appCtxt.getAppController().setStatusMsg(this.getMessage("zsugar_OpportunityError"));
+	}
+}
+com_irontec_zsugarH.prototype._CaseCreated = function(response){
+	if (response.id) {
+		var url =  this.getUserPropertyInfo("my_zsugar_url").value+"/index.php?module=Cases&action=DetailView&record="+response.id;
+		var msg = this.getMessage("zsugar_leadCreated")+"<br><a target='_blank' href='"+url+"'>"+this.inCaseName.getValue()+"</a>";
+		appCtxt.getAppController().setStatusMsg(msg);
+		return this._updateCRMValue();
+	} else {
+		return appCtxt.getAppController().setStatusMsg(this.getMessage("zsugar_CaseError"));
+	}
+}
+com_irontec_zsugarH.prototype._contactCreated = function(response){
+	if (response.id) {
+		var url =  this.getUserPropertyInfo("my_zsugar_url").value+"/index.php?module=Contacts&action=DetailView&record="+response.id;
+		var msg = this.getMessage("zsugar_contactCreated")+"<br><a target='_blank' href='"+url+"'>"+this.inContactFirstNameBox.getValue()+"</a>";
+		appCtxt.getAppController().setStatusMsg(msg);
+		return this._updateCRMValue();
+	} else {
+		return appCtxt.getAppController().setStatusMsg(this.getMessage("zsugar_contactError"));
 	}
 }
 
