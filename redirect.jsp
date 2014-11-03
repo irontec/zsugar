@@ -113,7 +113,6 @@
 	client.getParams().setParameter(headerName, request.getHeader(headerName));
 	//out.println(headerName+":"+request.getHeader(headerName));
       }
-      client.getParams().setParameter("http.protocol.expect-continue", true);
 
       BufferedReader br = null;
 

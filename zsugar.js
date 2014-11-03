@@ -53,7 +53,7 @@ com_irontec_zsugarH.prototype.menuItemSelected = function(itemId) {
 		/*** Show About Box ***/
 		case "ISUGAR_ABOUT":
 			var _view = new DwtComposite(this.getShell()); 	// Creates an empty div as a child of main shell div
-			_view.setSize("350", "230"); 					// Set width and height
+			_view.setSize(350, 230); 					// Set width and height
 			_view.getHtmlElement().innerHTML = this.getMessage("zsugar_aboutText");
 			var _dialog = new ZmDialog({title:this.getMessage("zsugar_about"), view:_view, parent:this.getShell(), standardButtons:[DwtDialog.OK_BUTTON]});
 			_dialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, function() {_dialog.popdown();}));
@@ -470,7 +470,7 @@ com_irontec_zsugarH.prototype._displayMSGDialog = function(msg) {
 
 	// Creates an empty div as a child of main shell div
 	this.pView = new DwtComposite(this.getShell()); 
-	this.pView.setSize("550", "430"); 				// Set width and height
+	this.pView.setSize(550, 430); 				// Set width and height
 	
 	/*** Fill the Main Tab ***/
 	this.pView.getHtmlElement().innerHTML = this._loadMainView();
@@ -649,8 +649,8 @@ com_irontec_zsugarH.prototype._loadMainView = function() {
 	html[i++] = "<div id='zsugar_selector' style='float:left'></div>";
 	html[i++] = "<div id='zsugar_filter' align='right'></div>";
 	html[i++] = "<div id='zsugar_atts' style='overflow:auto'></div> ";
-        html[i++] = "   <a href='"+this.getMessage("zsugar_powered")+"' target='_blank'>";
-	html[i++] = "   <img src='"+this.getResource("resources/Poweredby.png")+"' border='0' align='right'/></a>";
+    html[i++] = "   <div id='zsugar_powered_logo'><a href='"+this.getMessage("zsugar_powered")+"' target='_blank'>";
+	html[i++] = "   <img src='"+this.getResource("resources/Poweredby.png")+"' border='0' align='right'/></a></div>";
 	return html.join("");
 		
 };
@@ -675,7 +675,7 @@ com_irontec_zsugarH.prototype._changeEmailAddress = function(ev) {
                                 var sDialogTitle = this.getMessage("zsugar_addrchange"); // Get i18n resource string
         
                                 this.pOtherAddressView = new DwtComposite(this.getShell());      // Creates an empty div as a child of main shell div
-                                this.pOtherAddressView.setSize("250", "30");                                     // Set width and height
+                                this.pOtherAddressView.setSize(250, 30);                                     // Set width and height
                 
                                 var html = [], i=0;
                                 html[i++] = "<div id='zsugar_otheraddr' style='overflow:auto'>";
@@ -1258,7 +1258,7 @@ com_irontec_zsugarH.prototype._changeSubject = function(){
 		var sDialogTitle = this.getMessage("zsugar_subjectchange"); // Get i18n resource string
 	
   		this.pSubjectView = new DwtComposite(this.getShell()); 	    // Creates an empty div as a child of main shell div
-		this.pSubjectView.setSize("450", "50"); 				    // Set width and height
+		this.pSubjectView.setSize(450, 50); 				    // Set width and height
 
 		var html = [], i=0;
 		html[i++] = "<div id='zsugar_subject' style='overflow:auto'>";
@@ -1302,7 +1302,7 @@ com_irontec_zsugarH.prototype._moreOptionsDialog = function() {
                 var sDialogTitle = this.getMessage("zsugar_more_options"); // Get i18n resource string
 
                 this.pMoreOptionsView = new DwtComposite(this.getShell());      // Creates an empty div as a child of main shell div
-                this.pMoreOptionsView.setSize("250", "150");                                     // Set width and height
+                this.pMoreOptionsView.setSize(250, 150);                                     // Set width and height
 
 		// Configure Help button
 		var buttonParams = {
@@ -1333,7 +1333,7 @@ com_irontec_zsugarH.prototype._newLeadDialog = function() {
 	if (!this.pNewLeadView) {
 		var sDialogTitle = this.getMessage("zsugar_createLead"); // Get i18n resource string
 		this.pNewLeadView = new DwtComposite(this.getShell());    // Creates an empty div as a child of main shell div
-		this.pNewLeadView.setSize("450", "250");                      // Set width and height
+		this.pNewLeadView.setSize(450, 250);                      // Set width and height
 		
 		var html = [], i=0;
 		html[i++] = "<table>";
@@ -1360,7 +1360,11 @@ com_irontec_zsugarH.prototype._newLeadDialog = function() {
         	document.getElementById("zsugar_lead_email").appendChild(this.inLeadEmailBox.getHtmlElement());
 		this.inLeadAccBox = new DwtInputField({parent: this.pNewLeadView, size: 30});
         	document.getElementById("zsugar_lead_account").appendChild(this.inLeadAccBox.getHtmlElement());
-		this.taLeadDescription = new DwtHtmlEditor({parent: this.pNewLeadView});
+        if (typeof DwtHtmlEditor === "function")
+            this.taLeadDescription = new ZmHtmlEditor(this.pNewLeadView);
+        else
+            this.taLeadDescription = new ZmHtmlEditor({parent: this.pNewLeadView});
+        this.taLeadDescription.setMode("text/plain");
 		this.taLeadDescription.setSize(300, 70);
 		document.getElementById("zsugar_lead_desc").appendChild(this.taLeadDescription.getHtmlElement());
 	} 
@@ -1471,7 +1475,7 @@ com_irontec_zsugarH.prototype._displayAPPTDialog = function(appt) {
 
 	// Creates an empty div as a child of main shell div
 	this.pView = new DwtComposite(this.getShell()); 
-	this.pView.setSize("550", "430"); 				// Set width and height
+	this.pView.setSize(550, 430); 				// Set width and height
 	
 	/*** Fill the Main Tab ***/
 	this.pView.getHtmlElement().innerHTML = this._loadAPPTMainView();

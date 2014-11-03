@@ -1,3 +1,10 @@
+2014-10-30 zsugar 1.4.13
+    * Remplaced DwtHtmlEditor (no longer exists in Z8.5) with ZmHtmlEditor
+    * Fixed dialog width for Zimbra 8.5
+
+2014-10-27 zsugar 1.4.12
+    * Fixed HTTP error 417 - Expectation Failed when requested done with Expect 100-Continue
+
 2014-06-23 zsugar 1.4.11
 	* Added toolbar and menu buttons in all controllers
 
