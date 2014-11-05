@@ -1,4 +1,4 @@
-<zimlet name="com_irontec_zsugar" version="1.4.13" description="SugarCRM integration">
+<zimlet name="com_irontec_zsugar" version="1.4.14" description="SugarCRM integration">
 	<include>md5.js</include>
 	<include>sugarrestapi.js</include>
 	<include>zsugar.js</include>
