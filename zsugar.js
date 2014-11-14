@@ -76,8 +76,7 @@ com_irontec_zsugarH.prototype.menuItemSelected = function(itemId) {
 			
 		/*** Reconnect to SugarCRM ***/				
 		case "ISUGAR_RELOGIN":
-			if (this.iscrm.sessid !== false) this.iscrm.stopTimer = true;
-			else this._login();		
+			this._login(new AjxCallback(this, this._checkCredentials));
 			break;
 	}
 };
@@ -161,7 +160,7 @@ com_irontec_zsugarH.prototype.init = function() {
         this._zimbraMajorVer = appCtxt.getSettings().getInfoResponse.version.charAt(0);
 
 	// Try to Login!
-	this._login();
+	this._login(new AjxCallback(this, this._checkCredentials));
 };
 
 /***
@@ -177,7 +176,6 @@ com_irontec_zsugarH.prototype.init = function() {
 com_irontec_zsugarH.prototype._addSugarMsg = function(controller) {
     var msg = controller.getMsg();
     this._checkExported(msg);
-//    this._displayMSGDialog(msg);
 };
 
 /***
@@ -190,8 +188,6 @@ com_irontec_zsugarH.prototype._addSugarMsg = function(controller) {
  * 
  */
 com_irontec_zsugarH.prototype.doDrop = function(obj) {
-	// Check if we are properly logged into SugarCRM. 
-	if (!this._checkAuth()) return;
 	
 	var msg = obj.srcObj;
 
@@ -201,12 +197,10 @@ com_irontec_zsugarH.prototype.doDrop = function(obj) {
 			// Get First message from conversation
 			msg = msg.getFirstHotMsg();
 			// Time to rock. Process this Message!
-			//this._displayMSGDialog(msg);
 			this._checkExported(msg);
 			break;
 		case "MSG": 
 			// Time to rock. Process this Message!
-			// this._displayMSGDialog(msg);
 			this._checkExported(msg);
 			break;
 		case "APPT":
@@ -289,7 +283,7 @@ com_irontec_zsugarH.prototype.createTag = function (tagName){
  * click in the zimplet panel icon).
  * 
  */
-com_irontec_zsugarH.prototype._login = function() {	
+com_irontec_zsugarH.prototype._login = function(callback) {
 	var RESTprefix = '/service/v2/rest.php';
 	var Password;
 
@@ -305,8 +299,7 @@ com_irontec_zsugarH.prototype._login = function() {
 		Password = this.getUserPropertyInfo("my_zsugar_pass").value;
 
 	this.iscrm = new ironsugar(this.getUserPropertyInfo("my_zsugar_url").value + RESTprefix,this.getUserPropertyInfo("my_zsugar_username").value, Password ,this);
-	this.loggedIn = false;
-	this.iscrm.login(this.checkLoggedIn);
+	this.iscrm.login(callback);
 	
 }
 
@@ -319,11 +312,17 @@ com_irontec_zsugarH.prototype._login = function() {
  * @TODO This only checks if we are logged in, but gives no feedback if not logged in ;-(
  * 
  */
-com_irontec_zsugarH.prototype.checkLoggedIn = function() {
-		if (this._checkAuth()) {
-			this.updating = false;
-			appCtxt.getAppController().setStatusMsg(this.getMessage("zsugar_loggedin")+"<br /><small>"+this.getMessage("zsugar_name")+" "+this.getMessage("zsugar_version")+"</small>");
-		}
+com_irontec_zsugarH.prototype._checkCredentials = function(responsetxt) {
+    if (this.iscrm.sessid !== false) {
+        appCtxt.getAppController().setStatusMsg(
+            this.getMessage("zsugar_loggedin") + "<br /><small>" +
+            this.getMessage("zsugar_name") + " " + this.getMessage("zsugar_version") + "</small>");
+    } else {
+        appCtxt.getAppController().setStatusMsg(
+            this.getMessage("zsugar_notValidAuth") + "<br /><small>" +
+            this.getMessage("zsugar_name") + " " + this.getMessage("zsugar_version") + "<br />" +
+            responsetxt.substr(0, 30) + "</small>");
+    }
 }
 
 /***
@@ -346,11 +345,13 @@ com_irontec_zsugarH.prototype._checkAtt = function() {
  * It is called before doing any other tasks. 
  * 
  */
-com_irontec_zsugarH.prototype._checkAuth = function() {
-		if (this.iscrm.sessid !== false) return true;
-		var msg = this.getMessage("zsugar_notValidAuth")+"<br /><small>"+this.getMessage("zsugar_name")+" "+this.getMessage("zsugar_version")+"</small>";
-		appCtxt.getAppController().setStatusMsg(msg);
-		return false;
+com_irontec_zsugarH.prototype._execIfLogged = function(callback) {
+    if (this.iscrm.sessid == false) {
+        appCtxt.getAppController().setStatusMsg(this.getMessage("zsugar_notValidAuth")+"<br /><small>"+this.getMessage("zsugar_name")+" "+this.getMessage("zsugar_version")+"</small>");
+    } else {
+            if (callback !== undefined )
+                callback.run();
+    }
 }
 
 /***************************************************************************
@@ -396,15 +397,14 @@ com_irontec_zsugarH.prototype._checkExported = function(msg) {
         	
         }
 
-	// Display Dialog ;-)
-	this._displayMSGDialog(msg);
+	// Login and Display Dialog ;-)
+    this._login(new AjxCallback(this, this._displayMSGDialog, msg));
 }
 
 com_irontec_zsugarH.prototype._confirmExport = function(msg) {
 
 	this._dialog.popdown();
-	this._displayMSGDialog(msg);
-
+    this._login(new AjxCallback(this, this._displayMSGDialog, msg));
 }
 
 /*** 
@@ -457,6 +457,12 @@ com_irontec_zsugarH.prototype._trimDialogTitle = function(title){
  * and show it. 
  */
 com_irontec_zsugarH.prototype._displayMSGDialog = function(msg) {
+    // Check we have a valid session
+    if (this.iscrm.sessid == false) {
+        return appCtxt.getAppController().setStatusMsg(
+                this.getMessage("zsugar_notValidAuth") + "<br /><small>" +
+                this.getMessage("zsugar_name") + " " + this.getMessage("zsugar_version") + "</small>");
+    }
 
 	// Set Message object
 	this.msg = msg;
@@ -742,7 +748,6 @@ com_irontec_zsugarH.prototype._getLiLoading = function() {
  * is still another petition in course.
  */
 com_irontec_zsugarH.prototype._checkBeforePOST = function() {
-	if (!this._checkAuth()) return false;
 	if (this.updating) {
 		appCtxt.getAppController().setStatusMsg(this.getMessage("zsugar_peddingTransaction"));	
 		return false;
@@ -766,7 +771,7 @@ com_irontec_zsugarH.prototype._updateCRMValue = function() {
 	// Show our awesome progress bar in the Main Tab! 
 	document.getElementById("zsugar_mainTab").innerHTML = this._getLiLoading();
 	
-	// Mark us as fetching data and disable timers
+	// Mark us as fetching data
 	this.updating = true;
 	this.cbAddresses.disable();
 	this.ibFilter.setEnabled(false);

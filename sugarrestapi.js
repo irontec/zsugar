@@ -37,13 +37,8 @@ function ironsugar(url,u,p,obj) {
 	this.pass = p;
 	this.application = "ironsugar zimlet";
 	this.userData = [];
-	
 	this.sessid = false;
-	
 	this.parent = obj;
-	
-	this.stopTimer = false
-	
 }
 
 /***
@@ -128,65 +123,30 @@ ironsugar.prototype._callREST = function (method,data,callback) {
  * 
  */
 ironsugar.prototype.postlogin = function(callback,response) {
+
+    // Set default response
+    responsetxt = response.text;
+
     try {
-	var j = eval("(" + response.text + ")");
-	
-	if (!j.id) this.sessid = false;
-	else {
-		this.sessid = j.id;
-		this.uid = j['name_value_list']['user_id']['value'];
-	}
-	this.initTimer();
-    }catch(e){}
+	    var j = eval("(" + response.text + ")");
 
-    if (callback !== undefined )
-        callback.call(this.parent);
-}
-	
-/***
- * ironsugar.prototype.initTimer
- *
- * This function inits the timer that will be used
- * for keeping alive SugarCRM session.
- * 
- */
-ironsugar.prototype.initTimer = function() {
-	
-		// Check every minute session is still alive...
-		var o = this;
-		window.setTimeout(function() { 
-			o.getUserId.call(o);
-		},60000);
-}
+	    if (!j.id) {
+            this.sessid = false;
+	    } else {
+	        this.sessid = j.id;
+	        this.uid = j['name_value_list']['user_id']['value'];
+	    }
 
-/***
- * ironsugar.prototype.keepalive
- *
- * Callback function of internal timer that sends a
- * login method to avoid SugarCRM session expire.
- * 
- * @param response	Response JSON data from SugarCRM 
- * 
- */
-ironsugar.prototype.keepalive = function(response) {
-	try{
-		var id = eval(response.text);
-		this.parent._checkAtt();
-	}catch(e){}
+        // This response comes from SugarCRM
+        if (j.name)
+            responsetxt = j.name;
 
-	if (id != this.uid) {
-		this.sessid = false;
-		this.parent._checkAuth();
-		return;	
-	}
-	if (this.stopTimer) {
-		this.stopTimer = false;
-		this.parent._login();
-		return;	
-	}
+    }catch(e) {
 
-	this.initTimer();
+    }
 
+    // Provide responsetext to callback
+    callback.run(responsetxt);
 }
 
 /***
@@ -199,7 +159,6 @@ ironsugar.prototype.keepalive = function(response) {
  */
 ironsugar.prototype.login = function(callback) {
 	this._callREST("login",'[{"password":"'+this.pass+'","user_name":"'+this.user+'"},"'+this.application+'",[]]',this.postlogin, callback);
-	return;
 };
 
 /***
@@ -214,9 +173,10 @@ ironsugar.prototype.login = function(callback) {
 ironsugar.prototype.postOp = function(callback, response) {
 	try{
 		var j = eval("("+response.text + ")");
-	}catch(e){}
-        if (callback !== undefined )
-	    callback.call(this.parent,j);
+	}catch(e) {}
+
+    if (callback !== undefined )
+        callback.call(this.parent,j);
 };
 
 /***
@@ -275,18 +235,6 @@ ironsugar.prototype.postRelations = function(contactID, contactModule, relCnt, c
                var j = eval("("+response.text + ")");
     }catch(e){}
     callback.call(this.parent,contactID,contactModule, relCnt, j);
-};
-
-/***
- * ironsugar.prototype.getUserId
- *
- * This function sends a get_user_id request to Sugarcrm
- * 
- * @params Callback Function
- * 
- */
-ironsugar.prototype.getUserId = function() {
-	this._callREST("get_user_id",'["'+this.sessid+'"]',this.keepalive);
 };
 
 /***
