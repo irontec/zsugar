@@ -1339,6 +1339,7 @@ com_irontec_zsugarH.prototype._newLeadDialog = function() {
 		var sDialogTitle = this.getMessage("zsugar_createLead"); // Get i18n resource string
 		this.pNewLeadView = new DwtComposite(this.getShell());    // Creates an empty div as a child of main shell div
 		this.pNewLeadView.setSize(450, 250);                      // Set width and height
+
 		
 		var html = [], i=0;
 		html[i++] = "<table>";
@@ -1346,6 +1347,7 @@ com_irontec_zsugarH.prototype._newLeadDialog = function() {
 		html[i++] =     "<tr><td>"+this.getMessage("zsugar_lead_lastname")+":</td><td id='zsugar_lead_lastname'></td></tr>";
 		html[i++] =     "<tr><td>"+this.getMessage("zsugar_lead_email")+":</td><td id='zsugar_lead_email'></td></tr>";
 		html[i++] =     "<tr><td>"+this.getMessage("zsugar_lead_account")+":</td><td id='zsugar_lead_account'></td></tr>";
+		html[i++] =     "<tr><td>"+this.getMessage("zsugar_lead_source")+":</td><td id='zsugar_lead_source'></td></tr>";
 		html[i++] =     "<tr><td>"+this.getMessage("zsugar_lead_desc")+":</td><td id='zsugar_lead_desc'></td></tr>";
 		html[i++] =     "<tr><td colspan='2'><input type='checkbox' id='zsugar_lead_assigned' checked>"+this.getMessage("zsugar_lead_assigned")+"</input></td></tr>";
 		html[i++] = "<table>";
@@ -1365,6 +1367,12 @@ com_irontec_zsugarH.prototype._newLeadDialog = function() {
         	document.getElementById("zsugar_lead_email").appendChild(this.inLeadEmailBox.getHtmlElement());
 		this.inLeadAccBox = new DwtInputField({parent: this.pNewLeadView, size: 30});
         	document.getElementById("zsugar_lead_account").appendChild(this.inLeadAccBox.getHtmlElement());
+//        this.inLeadSourceBox = new DwtInputField({parent: this.pNewLeadView, size: 30});
+        this.cbLeadSources = new DwtSelect({parent:this.pNewLeadView});
+        this.cbLeadSources.getHtmlElement().style.width = '100%';
+        document.getElementById("zsugar_lead_source").appendChild(this.cbLeadSources.getHtmlElement());
+        this.iscrm.getLeadsSources(this._populateLeadSources);
+
         if (typeof DwtHtmlEditor === "function")
             this.taLeadDescription = new ZmHtmlEditor(this.pNewLeadView);
         else
@@ -1405,6 +1413,23 @@ com_irontec_zsugarH.prototype._newLeadDialog = function() {
         this.pNewLeadDialog.popup(); //show the dialog
 };
 
+com_irontec_zsugarH.prototype._populateLeadSources = function(sources) {
+    var options = [];
+
+    options.push(" ");
+
+    for (var i = 0;i<sources.result_count;i++) {
+        var value = sources.entry_list[i].name_value_list.lead_source.value;
+        if (options.indexOf(value) == -1) {
+            options.push(value);
+        }
+    }
+
+    for (var j = 0; j<options.length; j++) {
+        this.cbLeadSources.addOption(options[j], false, options[j]);
+    }
+}
+
 com_irontec_zsugarH.prototype._createNewLead = function () {
 	// TODO verify required data
 
@@ -1412,6 +1437,7 @@ com_irontec_zsugarH.prototype._createNewLead = function () {
 	var lastname = this.inLeadLastNameBox.getValue();
 	var email = this.inLeadEmailBox.getValue();
 	var acc = this.inLeadAccBox.getValue();
+	var source = this.cbLeadSources.getValue();
 	var assigned = document.getElementById("zsugar_lead_assigned").checked;
 	var desc = this.taLeadDescription.getContent();
 
@@ -1419,7 +1445,7 @@ com_irontec_zsugarH.prototype._createNewLead = function () {
 	this.pNewLeadDialog.popdown();
 
 	// Request CRM to create the Lead 
-	this.iscrm.createLead(firstname, lastname, email, acc, desc, assigned, this._leadCreated);
+	this.iscrm.createLead(firstname, lastname, email, acc, source, desc, assigned, this._leadCreated);
 
 }
 

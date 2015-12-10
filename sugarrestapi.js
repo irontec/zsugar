@@ -211,6 +211,21 @@ ironsugar.prototype.getLeadsFromMail = function(email, callback){
         return true;
 }
 
+/***
+ * getLeadsSources
+ * Get Leads source information
+ *
+ * @param callback  Callback function after feching data
+ ***/
+ironsugar.prototype.getLeadsSources = function(callback){
+        // Fetch Leads IDs for given email
+        var q = "lead_source IS NOT NULL";
+        this._callREST("get_entry_list",'["'+this.sessid+'","Leads","'+q+'","",0,["lead_source"],"[]",1000,"false"]',this.postOp, callback);
+
+        return true;
+}
+
+
 /**
  * getModuleInfo
  * @param contactID     ContactID to fetch relationships
@@ -444,7 +459,7 @@ ironsugar.prototype.postAttach = function(fname,callback, response) {
 };
 
 
-ironsugar.prototype.createLead = function(firstname, lastname, email, acc, desc, assigned, callback) {
+ironsugar.prototype.createLead = function(firstname, lastname, email, acc, source, desc, assigned, callback) {
 
 	// Escape special characters for JSON.
 	// @todo this could be improved A LOT using a JSON encoder instead a JSON format string
@@ -453,6 +468,7 @@ ironsugar.prototype.createLead = function(firstname, lastname, email, acc, desc,
 	d +=	'{"name":"first_name", "value":"'+ this.EscapeJSON(firstname) +'"},'+
 		'{"name":"last_name", "value":"'+ this.EscapeJSON(lastname) +'"},'+
 		'{"name":"account_name", "value":"'+ this.EscapeJSON(acc) +'"},'+
+		'{"name":"lead_source", "value":"'+ this.EscapeJSON(source) +'"},'+
 		'{"name":"description", "value":"'+ this.EscapeJSON(desc)+'"},'+
 		'{"name":"email1", "value":"'+this.EscapeJSON(email)+'"}';
 
