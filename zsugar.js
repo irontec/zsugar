@@ -855,7 +855,7 @@ com_irontec_zsugarH.prototype._fetchRelationships = function(data){
 
         // Append Contact data to this one. This is needed because we fetch Contact and Leads
         // data in separate functions and we join them here.
-        if (this.data !== undefined)
+        if (data !== undefined && data.entry_list !== undefined && this.data !== undefined)
             data.entry_list = data.entry_list.concat(this.data.entry_list);
 
 	// Error treatment
