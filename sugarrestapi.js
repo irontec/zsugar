@@ -308,6 +308,8 @@ ironsugar.prototype.saveEmail = function(msg,subject,callback) {
 	   }
         }
         body = this.EscapeJSON(body);
+
+    subject = this.EscapeJSON(subject);
 	
 	var d = '['+
 		'{"name":"assigned_user_id", "value":"'+this.uid+'"},'+
