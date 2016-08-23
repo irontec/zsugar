@@ -1378,8 +1378,25 @@ com_irontec_zsugarH.prototype._newLeadDialog = function() {
         else
             this.taLeadDescription = new ZmHtmlEditor({parent: this.pNewLeadView});
         this.taLeadDescription.setMode("text/plain");
-		this.taLeadDescription.setSize(300, 70);
+		this.taLeadDescription.setSize(280, 70);
 		document.getElementById("zsugar_lead_desc").appendChild(this.taLeadDescription.getHtmlElement());
+
+        // Set field tab order
+        this.tabGroup = new DwtTabGroup("zsugar_lead_tabs");
+        this.tabGroup.addMember(this.inLeadFirstNameBox);
+        this.tabGroup.addMember(this.inLeadLastNameBox);
+        this.tabGroup.addMember(this.inLeadEmailBox);
+        this.tabGroup.addMember(this.inLeadAccBox);
+        this.tabGroup.addMember(this.cbLeadSources);
+        this.tabGroup.addMember(this.taLeadDescription);
+        this.bnLeadOk = this.pNewLeadDialog._tabGroup.getFirstMember();
+        this.tabGroup.addMember(this.bnLeadOk);
+        this.pNewLeadDialog._tabGroup.removeMember(this.bnLeadOk);
+        this.bnLeadCancel = this.pNewLeadDialog._tabGroup.getFirstMember();
+        this.tabGroup.addMember(this.bnLeadCancel);
+        this.pNewLeadDialog._tabGroup.removeMember(this.bnLeadCancel);
+        this.pNewLeadDialog._tabGroup.addMember(this.tabGroup);
+        this.pNewLeadDialog._tabGroup.setFocusMember(this.inLeadFirstNameBox);
 	} 
 
 	// Initialize fields
