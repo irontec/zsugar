@@ -1,3 +1,14 @@
+2016-08-23 zsugar 1.4.16
+    * Tab between input fields on Lead Creation Dialog.
+    * Also escape JSON characters in subject
+
+2015-12-10 zsugar 1.4.15
+    * Create Lead: Added a field for Source
+    * Fixed a bug when Contacts/Leads had no relations
+
+2014-10-14 zsugar 1.4.14
+    * Recoding login process to remove session refresh timer
+
 2014-10-30 zsugar 1.4.13
     * Remplaced DwtHtmlEditor (no longer exists in Z8.5) with ZmHtmlEditor
     * Fixed dialog width for Zimbra 8.5
