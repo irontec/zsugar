@@ -1,7 +1,7 @@
-This project is not longer mantained because we don't use SugarCRM anymore.
-You can find more updated releases of this zimlet in bTactic fork
-
-https://github.com/btactic/zsugar/
+### This project is not longer mantained because we don't use SugarCRM anymore.
+### You can find more updated releases of this zimlet in bTactic fork
+###
+### https://github.com/btactic/zsugar/
 
 
 # zsugar
